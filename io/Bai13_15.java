@@ -120,10 +120,7 @@ public class Bai13_15 {
 		// write lại các sinh viên phía sau
 		while (!queue.isEmpty()) {
 			sv = queue.poll();
-			raf.writeUTF(sv.getMaSV());
-			raf.writeUTF(sv.getHoTen());
-			raf.writeInt(sv.getTuoi());
-			raf.writeDouble(sv.getdTB());
+			sv.save(raf);
 		}
 
 		// update lại pointer của các sinh viên phía sau
