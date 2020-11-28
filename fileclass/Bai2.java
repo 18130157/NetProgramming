@@ -66,8 +66,7 @@ public class Bai2 {
 					return str.matches(pattern);
 				}
 			});
-			for (File f : arr)
-				list.add(f);
+			Collections.addAll(list, arr);
 
 			for (File f : file.listFiles())
 				findAll(f.getPath(), pattern);

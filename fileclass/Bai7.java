@@ -9,12 +9,14 @@ public class Bai7 {
 
 	public static void copyAll(String sDir, String dDir, String... ext) throws IOException {
 		File sourceDir = new File(sDir);
-		if (!sourceDir.exists())
+		if (!sourceDir.exists() || !sourceDir.isDirectory())
 			return;
 
 		File desDir = new File(dDir);
 		if (!desDir.exists())
 			desDir.mkdirs();
+		else if (!desDir.isDirectory())
+			return;
 
 		for (File f : sourceDir.listFiles()) {
 			if (f.isFile() && isExtended(f, ext)) {
