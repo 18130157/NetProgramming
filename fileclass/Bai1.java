@@ -10,7 +10,7 @@ public class Bai1 {
 
 		File[] arr = f.listFiles();
 		// nếu f là file mà gọi listFiles() thì sẽ trả về null
-		// => nếu arr != null và arr.length > 0 thì arr là directory không rỗng
+		// => nếu arr != null và arr.length > 0 thì f là directory không rỗng
 		if (arr != null && arr.length > 0)
 			for (File file : arr)
 				delete(file.getPath());
