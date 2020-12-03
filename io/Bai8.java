@@ -16,11 +16,14 @@ public class Bai8 {
 
 		File dFile = new File(destFile);
 		if (!dFile.exists()) {
-			String directoryPath = dFile.getAbsolutePath().substring(0,
-					dFile.getAbsolutePath().length() - dFile.getName().length());
+			String directoryPath = dFile.getCanonicalPath().substring(0,
+					dFile.getCanonicalPath().length() - dFile.getName().length());
 			File desDir = new File(directoryPath);
+			boolean check = true;
 			if (!desDir.exists())
-				desDir.mkdirs();
+				check = desDir.mkdirs();
+			if (!check)
+				return false;
 		}
 
 		InputStream bis = new BufferedInputStream(new FileInputStream(sourceFile));
