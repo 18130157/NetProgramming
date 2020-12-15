@@ -17,7 +17,7 @@ public class Bai8 {
 		File dFile = new File(destFile);
 		if (!dFile.exists()) {
 			String directoryPath = dFile.getCanonicalPath().substring(0,
-					dFile.getCanonicalPath().length() - dFile.getName().length());
+					dFile.getCanonicalPath().length() - dFile.getName().length() - 1);
 			File desDir = new File(directoryPath);
 			boolean check = true;
 			if (!desDir.exists())
