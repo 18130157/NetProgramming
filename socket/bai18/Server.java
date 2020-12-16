@@ -62,7 +62,7 @@ public class Server {
 
 		while (receiveBytes < size) {
 			readBytes = in.read(data);
-			bos.write(data, 0, readBytes);
+			out.write(data, 0, readBytes);
 			receiveBytes += readBytes;
 		}
 	}
