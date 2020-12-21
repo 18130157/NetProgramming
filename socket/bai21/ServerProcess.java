@@ -49,17 +49,12 @@ public class ServerProcess implements Runnable {
 				}
 
 				tokenizer = new StringTokenizer(command);
-				if (tokenizer.countTokens() != 2) {
+				if (tokenizer.countTokens() < 2 || !isCommand((type = tokenizer.nextToken()))) {
 					netOut.println("Invalid command !");
 					continue;
 				}
 
-				if (!isCommand((type = tokenizer.nextToken()))) {
-					netOut.println("Invalid command !");
-					continue;
-				}
-
-				re = find(type, tokenizer.nextToken());
+				re = find(type, tokenizer);
 				if (re != null) {
 					netOut.println(re.size());
 					for (Student st : re)
@@ -83,16 +78,20 @@ public class ServerProcess implements Runnable {
 		return false;
 	}
 
-	public List<Student> find(String type, String value) {
+	public List<Student> find(String type, StringTokenizer tokenizer) {
 		List<Student> re = new ArrayList<>();
-		
+		String value = tokenizer.nextToken();
+
 		if (type.equalsIgnoreCase(Server.FB_NAME)) {
+			while (tokenizer.hasMoreTokens())
+				value += " " + tokenizer.nextToken();
+
 			for (Student st : Server.list)
 				if (value.equalsIgnoreCase(st.getName()))
 					re.add(st);
 			return re;
 		}
-		
+
 		if (type.equalsIgnoreCase(Server.FB_AGE)) {
 			int age;
 			try {
@@ -106,7 +105,7 @@ public class ServerProcess implements Runnable {
 					re.add(st);
 			return re;
 		}
-		
+
 		if (type.equalsIgnoreCase(Server.FB_SCORE)) {
 			double score;
 			try {
@@ -120,7 +119,7 @@ public class ServerProcess implements Runnable {
 					re.add(st);
 			return re;
 		}
-		
+
 		return null;
 	}
 
