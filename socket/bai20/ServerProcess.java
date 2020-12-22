@@ -20,11 +20,9 @@ public class ServerProcess implements Runnable {
 
 	static {
 		StringBuilder stb = new StringBuilder();
-		for (int i = 1; i <= 16; i++)
-			stb.append("#");
-		stb.append(".");
-		for (int i = 1; i <= 16; i++)
-			stb.append("#");
+		for (int i = 1; i <= 32; i++)
+			stb.append('#');
+		stb.insert(16, '.');
 		df = new DecimalFormat(stb.toString());
 		df.setRoundingMode(RoundingMode.HALF_UP);
 	}
