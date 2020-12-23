@@ -22,7 +22,7 @@ public class Student implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("ID %d: %s — %d — %.2fđ ", id, name, age, score);
+		return String.format("ID %d: %s - %d - %.2fd ", id, name, age, score);
 	}
 
 	public int getId() {

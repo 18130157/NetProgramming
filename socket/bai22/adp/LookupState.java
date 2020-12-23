@@ -1,11 +1,5 @@
-package bai21;
+package bai22.adp;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,59 +7,43 @@ import java.util.StringTokenizer;
 import base.MyData;
 import base.Student;
 
-public class ServerProcess implements Runnable {
-	private Socket socket;
-	private BufferedReader netIn;
-	private PrintWriter netOut;
+public class LookupState implements State {
+	private ServerProcess sp;
 
-	public ServerProcess(Socket socket) {
-		this.socket = socket;
-		try {
-			netIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-			netOut = new PrintWriter(new BufferedOutputStream(this.socket.getOutputStream()), true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public LookupState(ServerProcess sp) {
+		this.sp = sp;
 	}
 
 	@Override
-	public void run() {
-		try {
-			netOut.println("Welcome !");
-			String command;
-			StringTokenizer tokenizer;
-			List<Student> re;
+	public void handle() {
+		String command;
+		StringTokenizer tokenizer;
+		List<Student> re;
 
-			while (true) {
-				try {
-					command = netIn.readLine();
-					if (command.equalsIgnoreCase("Quit")) {
-						netOut.println("Bye");
-						break;
-					}
-				} catch (Exception e) { // client click Terminate on console
-					break;
+		while (true) {
+			try {
+				command = sp.readLine();
+				if (command.equalsIgnoreCase("Quit")) {
+					sp.setCurrent(sp.getQuit());
+					sp.run();
+					return;
 				}
-
-				tokenizer = new StringTokenizer(command);
-				if (tokenizer.countTokens() < 2) {
-					netOut.println("Invalid command !");
-					continue;
-				}
-
-				re = find(tokenizer.nextToken(), tokenizer);
-				if (re != null) {
-					netOut.println(re.size());
-					for (Student st : re)
-						netOut.println(st.toString());
-				}
-
+			} catch (Exception e) { // client click Terminate on console
+				return;
 			}
 
-			netIn.close();
-			netOut.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			tokenizer = new StringTokenizer(command);
+			if (tokenizer.countTokens() < 2) {
+				sp.println("Invalid look up command !");
+				continue;
+			}
+
+			re = find(tokenizer.nextToken(), tokenizer);
+			if (re != null) {
+				sp.println(re.size());
+				for (Student st : re)
+					sp.println(st.toString());
+			}
 		}
 
 	}
@@ -78,7 +56,7 @@ public class ServerProcess implements Runnable {
 		if (action.equalsIgnoreCase(Server.FB_SCORE))
 			return findByScore(tokenizer);
 
-		netOut.println("Invalid command !");
+		sp.println("Invalid look up command !");
 		return null;
 	}
 
@@ -100,7 +78,7 @@ public class ServerProcess implements Runnable {
 		try {
 			age = Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			netOut.println("Invalid age !");
+			sp.println("Invalid age !");
 			return null;
 		}
 		for (Student st : MyData.students)
@@ -116,7 +94,7 @@ public class ServerProcess implements Runnable {
 		try {
 			score = Double.parseDouble(value);
 		} catch (NumberFormatException e) {
-			netOut.println("Invalid score !");
+			sp.println("Invalid score !");
 			return null;
 		}
 		for (Student st : MyData.students)

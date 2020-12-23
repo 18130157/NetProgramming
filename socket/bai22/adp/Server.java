@@ -1,4 +1,4 @@
-package bai21;
+package bai22.adp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
+
 	private ServerSocket server;
 	public static final String FB_NAME = "findByName";
 	public static final String FB_AGE = "findByAge";
 	public static final String FB_SCORE = "findByScore";
-	public static List<String> cmds = new ArrayList<>();
+	public static List<String> lookupCmds = new ArrayList<>();
 
 	static {
-		cmds.add(FB_NAME);
-		cmds.add(FB_AGE);
-		cmds.add(FB_SCORE);
+		lookupCmds.add(FB_NAME);
+		lookupCmds.add(FB_AGE);
+		lookupCmds.add(FB_SCORE);
 	}
 
 	public Server() {
