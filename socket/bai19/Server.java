@@ -1,81 +1,33 @@
 package bai19;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@SuppressWarnings("resource")
 public class Server {
+	// giả sử tất cả dữ liệu, file của Server đều nằm trong server_dir
+	private static String server_dir = "D:\\TestLTM\\server";
 
-	private ServerSocket server;
-	private Socket socket;
-	private DataInputStream netIn;
-	private DataOutputStream netOut;
-	private BufferedInputStream bis;
+	public static String getServer_dir() { return server_dir; }
 
-	public Server(int port) {
+	public static void setServer_dir(String server_dir) { Server.server_dir = server_dir; }
+
+	public static void main(String[] args) {
 		try {
-			server = new ServerSocket(port);
+			Socket socket;
+			ServerSocket server = new ServerSocket(7);
 			System.out.println("Waiting for client...");
-			socket = server.accept();
-			System.out.println("Client connected");
-			netIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-			netOut = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			netOut.writeUTF("Welcome");
-			netOut.flush();
+
+			while (true) {
+				socket = server.accept();
+				System.out.println("Client connected");
+				new Thread(new ServerProcess(socket)).start();
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void upload() throws IOException {
-		File sFile;
-		while (true) {
-			try {
-				sFile = new File(netIn.readUTF());
-			} catch (IOException e) {	// client enter "exit" or click Terminate on console
-				netIn.close();
-				netOut.close();
-				System.out.println("Client disconnected");
-				return;
-			}
-
-			if (!sFile.exists() || !sFile.isFile()) {
-				netOut.writeUTF("Fail");
-				netOut.flush();
-				continue;
-			}
-
-			netOut.writeUTF("Good");
-			netOut.writeLong(sFile.length());
-			netOut.flush();
-			
-			if (!netIn.readUTF().equals("Ready"))
-				continue;
-
-			bis = new BufferedInputStream(new FileInputStream(sFile));
-			int readBytes;
-			byte[] data = new byte[1024 * 1024];
-			while ((readBytes = bis.read(data)) != -1)
-				netOut.write(data, 0, readBytes);
-
-			bis.close();
-			netIn.close();
-			netOut.close();
-			break;
-		}
-
-	}
-
-	public static void main(String[] args) throws IOException {
-		Server s = new Server(7);
-		s.upload();
 	}
 
 }

@@ -13,7 +13,8 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 public class Client {
-
+	// giả sử tất cả dữ liệu, file của Client đều nằm trong client_dir
+	private static String client_dir = "D:\\TestLTM\\client";
 	private Socket socket;
 	private DataInputStream netIn;
 	private DataOutputStream netOut;
@@ -33,56 +34,62 @@ public class Client {
 		}
 	}
 
-	public void upload() throws IOException {
+	public void upload() {
 		System.out.println("Upload file");
 		System.out.println("Syntax: copy source_file dest_file\n");
 
-		userIn = new BufferedReader(new InputStreamReader(System.in));
-		String line;
-		StringTokenizer sTokenizer;
+		try {
+			userIn = new BufferedReader(new InputStreamReader(System.in));
+			String command;
+			StringTokenizer tokenizer;
 
-		while ((line = userIn.readLine()) != null) {
-			if (line.trim().equalsIgnoreCase("Exit")) {
-				netIn.close();
-				netOut.close();
-				userIn.close();
-				return;
-			}
+			while (true) {
+				command = userIn.readLine().trim();
+				if (command.equalsIgnoreCase("Exit")) {
+					netOut.writeUTF("Quit");
+					netOut.flush();
+					if (netIn.readUTF().equals("Bye"))
+						break;
+				}
 
-			sTokenizer = new StringTokenizer(line);
-
-			if (sTokenizer.countTokens() == 3 && sTokenizer.nextToken().equalsIgnoreCase("Copy")) {
-				File sFile = new File(sTokenizer.nextToken());
-				if (!sFile.exists() || !sFile.isFile()) {
-					System.err.println("Invalid source file\n");
+				tokenizer = new StringTokenizer(command);
+				if (tokenizer.countTokens() != 3 || !tokenizer.nextToken().equalsIgnoreCase("Copy")) {
+					System.err.println("Invalid command !");
 					continue;
 				}
-				
-				netOut.writeUTF(sTokenizer.nextToken());	// dest
+
+				File sFile = new File(client_dir + "\\" + tokenizer.nextToken());
+				if (!sFile.exists() || !sFile.isFile()) {
+					System.err.println("Invalid source file !");
+					continue;
+				}
+
+				netOut.writeUTF(tokenizer.nextToken()); // send name dest file to server
 				netOut.writeLong(sFile.length());
 				netOut.flush();
 
-				bis = new BufferedInputStream(new FileInputStream(sFile));
 				int readBytes;
 				byte[] data = new byte[1024 * 1024];
-				System.out.println("Uploading...");
-				while ((readBytes = bis.read(data)) != -1)
+				bis = new BufferedInputStream(new FileInputStream(sFile));
+				while ((readBytes = bis.read(data)) != -1) {
 					netOut.write(data, 0, readBytes);
-				netOut.close();
-
+					netOut.flush();
+				}
+				
+				System.out.println("Upload " + sFile.getName() + " done !");
 				bis.close();
-				System.out.println("Upload done !");
-				break;
-			} else
-				System.out.println("Syntax: copy source_file dest_file\n");
+			}
+
+			userIn.close();
+			netIn.close();
+			netOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		netIn.close();
-		netOut.close();
-		userIn.close();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		Client client = new Client();
 		client.upload();
 	}

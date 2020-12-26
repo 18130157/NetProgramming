@@ -11,12 +11,12 @@ public class MyData {
 	
 	static {
 		students.add(new Student(1, "Nguyen Canh Ty", 18, 7.2));
-		students.add(new Student(2, "Tran Quy Suu", 19, 8.5));
-		students.add(new Student(3, "Le Binh Dan", 20, 9.4));
+		students.add(new Student(2, "Tran Tan Suu", 19, 8.5));
+		students.add(new Student(3, "Le Nham Dan", 20, 9.4));
 		students.add(new Student(4, "Nguyen Canh Ty", 21, 9));
-		students.add(new Student(5, "Pham Tan Mao", 18, 9));
-		students.add(new Student(6, "Huynh Canh Thin", 21, 9.4));
-		students.add(new Student(7, "Phan Dinh Ty", 18, 9.4));
+		students.add(new Student(5, "Pham Quy Mao", 18, 9));
+		students.add(new Student(6, "Huynh Giap Thin", 21, 9.4));
+		students.add(new Student(7, "Phan At Ty", 18, 9.4));
 		
 		mapUser.put("ti", "2020");
 		mapUser.put("suu", "2021");
