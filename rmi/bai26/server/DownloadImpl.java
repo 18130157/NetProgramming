@@ -43,7 +43,7 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 
 		try {
 			int readBytes;
-			byte[] data = new byte[512];
+			byte[] data = new byte[1024 * 1024];
 
 			if ((readBytes = bis.read(data)) < 0)
 				return null;
