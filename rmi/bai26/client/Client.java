@@ -85,8 +85,8 @@ public class Client {
 					continue;
 				}
 
-				int key = down.openFile(tokenizer.nextToken());
-				if (key == -1) {
+				long ID = down.openFile(tokenizer.nextToken());
+				if (ID == -1) {
 					System.out.println("Source file not found !");
 					continue;
 				}
@@ -95,15 +95,15 @@ public class Client {
 				bos = new BufferedOutputStream(new FileOutputStream(dFile));
 				byte[] data;
 
-				while ((data = down.getData(key)) != null)
+				while ((data = down.getData(ID)) != null)
 					bos.write(data);
 				bos.close();
 
 				System.out.println("Download " + dFile.getName() + " done !");
 
-				down.close(key);
+				down.close(ID);
 			}
-			
+
 			System.out.println("Please enter service name !");
 		} catch (IOException e) {
 			e.printStackTrace();

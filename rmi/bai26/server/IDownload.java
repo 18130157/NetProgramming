@@ -5,9 +5,9 @@ import java.rmi.RemoteException;
 
 public interface IDownload extends Remote {
 	
-	int openFile(String filename) throws RemoteException;
+	long openFile(String filename) throws RemoteException;
 
-	byte[] getData(int key) throws RemoteException;
+	byte[] getData(long sessionID) throws RemoteException;
 
-	void close(int key) throws RemoteException;
+	void close(long sessionID) throws RemoteException;
 }

@@ -14,21 +14,21 @@ import java.util.Map;
 
 public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	private static final long serialVersionUID = 1L;
-	private static Map<Integer, InputStream> map = new HashMap<>();
+	private static long id = 0;
+	private static Map<Long, InputStream> map = new HashMap<>();
 
 	protected DownloadImpl() throws RemoteException {
 		super();
 	}
 
 	@Override
-	public int openFile(String filename) throws RemoteException {
+	public long openFile(String filename) throws RemoteException {
 		try {
 			File sFile = new File(Server.getServer_dir() + "\\" + filename);
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sFile));
-
-			int key = map.size();
-			map.put(key, bis);
-			return key;
+			long sid = id++;
+			map.put(sid, bis);
+			return sid;
 
 		} catch (FileNotFoundException e) {
 			return -1;
@@ -36,22 +36,22 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	}
 
 	@Override
-	public byte[] getData(int key) throws RemoteException {
-		InputStream bis = map.get(key);
+	public byte[] getData(long sessionID) throws RemoteException {
+		InputStream bis = map.get(sessionID);
 		if (bis == null)
 			return null;
 
 		try {
 			int readBytes;
-			byte[] data = new byte[1024 * 1024];
+			byte[] data = new byte[512];
 
-			if ((readBytes = bis.read(data)) != -1) {
-				if (readBytes == data.length)
-					return data;
-				return Arrays.copyOf(data, readBytes);
-			}
+			if ((readBytes = bis.read(data)) < 0)
+				return null;
+			
+			if (readBytes == data.length)
+				return data;
+			return Arrays.copyOf(data, readBytes);
 
-			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -60,9 +60,9 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	}
 
 	@Override
-	public void close(int key) throws RemoteException {
+	public void close(long sessionID) throws RemoteException {
 		try {
-			map.remove(key).close();
+			map.remove(sessionID).close();
 
 		} catch (NullPointerException e) {
 			return;
