@@ -69,7 +69,8 @@ public class Client {
 				File dFile = new File(client_dir + "\\" + tokenizer.nextToken());
 				bos = new BufferedOutputStream(new FileOutputStream(dFile));
 
-				int readBytes, receiveBytes = 0;
+				int readBytes;
+				long receiveBytes = 0;
 				byte[] data = new byte[1024 * 1024];
 
 				while (receiveBytes < size) {

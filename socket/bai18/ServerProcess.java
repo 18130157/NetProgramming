@@ -41,7 +41,8 @@ public class ServerProcess implements Runnable {
 
 				long size = netIn.readLong();
 				bos = new BufferedOutputStream(new FileOutputStream(Server.getServer_dir() + "\\" + str));
-				int readBytes, receiveBytes = 0;
+				int readBytes;
+				long receiveBytes = 0;
 				byte[] data = new byte[1024 * 1024];
 
 				while (receiveBytes < size) {
