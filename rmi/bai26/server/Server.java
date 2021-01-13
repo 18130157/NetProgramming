@@ -7,7 +7,20 @@ import java.rmi.registry.Registry;
 public class Server {
 	// giả sử tất cả dữ liệu, file của Server đều nằm trong server_dir
 	private static String server_dir = "D:\\TestLTM\\server";
-	
+
+	public static final String FB_NAME = "findByName";
+	public static final String FB_AGE = "findByAge";
+	public static final String FB_SCORE = "findByScore";
+	public static String dbUrl = "jdbc:odbc:students";
+
+	static {
+		try {
+			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String getServer_dir() { return server_dir; }
 
 	public static void setServer_dir(String server_dir) { Server.server_dir = server_dir; }
@@ -16,9 +29,14 @@ public class Server {
 		try {
 			Registry reg = LocateRegistry.createRegistry(12345);
 			IDownload d = new DownloadImpl();
+			IUpload u = new UploadImpl();
+			ILookup lo = new LookupImpl();
+
 			reg.rebind("download", d);
+			reg.rebind("upload", u);
+			reg.rebind("lookup", lo);
 			System.out.println("Server is running !");
-			
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

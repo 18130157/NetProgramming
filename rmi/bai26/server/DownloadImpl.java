@@ -25,7 +25,7 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	public long openFile(String filename) throws RemoteException {
 		try {
 			File sFile = new File(Server.getServer_dir() + "\\" + filename);
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sFile));
+			InputStream bis = new BufferedInputStream(new FileInputStream(sFile));
 			long sid = id++;
 			map.put(sid, bis);
 			return sid;
@@ -47,14 +47,13 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 
 			if ((readBytes = bis.read(data)) < 0)
 				return null;
-			
+
 			if (readBytes == data.length)
 				return data;
 			return Arrays.copyOf(data, readBytes);
 
 		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			throw new RemoteException(e.getMessage());
 		}
 
 	}
@@ -63,12 +62,9 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	public void close(long sessionID) throws RemoteException {
 		try {
 			map.remove(sessionID).close();
-
-		} catch (NullPointerException e) {
-			return;
-
-		} catch (IOException e) {
-			e.printStackTrace();
+		}
+		catch (IOException e) {
+			throw new RemoteException(e.getMessage());
 		}
 	}
 
