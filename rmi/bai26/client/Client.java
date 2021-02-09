@@ -62,12 +62,12 @@ public class Client {
 				if (str.equals("download")) {
 					IDownload down = (IDownload) remote;
 					download(down);
-				}
+				} else
 
 				if (str.equals("upload")) {
 					IUpload up = (IUpload) remote;
 					upload(up);
-				}
+				} else
 
 				if (str.equals("lookup")) {
 					ILookup lo = (ILookup) remote;
@@ -208,7 +208,7 @@ public class Client {
 					for (int i = 0; i < nFound; i++)
 						System.out.println(lo.getLine(ID));
 				}
-				
+
 				lo.close(ID);
 			}
 
