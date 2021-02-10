@@ -16,7 +16,7 @@ import base.Student;
 
 public class LookupImpl extends UnicastRemoteObject implements ILookup {
 	private static final long serialVersionUID = 1L;
-	private static volatile long id = 0;
+	private static long id = 0;
 	private static Map<String, Connection> mapConn = new HashMap<>();
 	private static Map<String, PreparedStatement> mapPrepStmt = new HashMap<>();
 	private static Map<String, ResultSet> mapRes = new HashMap<>();
@@ -55,7 +55,7 @@ public class LookupImpl extends UnicastRemoteObject implements ILookup {
 			prepStmt.setString(1, '%' + value + '%');
 			ResultSet res = prepStmt.executeQuery();
 
-			String sid = String.valueOf(generateID());
+			String sid = String.valueOf(id++);
 			put(sid, conn, prepStmt, res);
 			return sid;
 
@@ -80,7 +80,7 @@ public class LookupImpl extends UnicastRemoteObject implements ILookup {
 			ResultSet res;
 			res = prepStmt.executeQuery();
 
-			String sid = String.valueOf(generateID());
+			String sid = String.valueOf(id++);
 			put(sid, conn, prepStmt, res);
 			return sid;
 
@@ -103,7 +103,7 @@ public class LookupImpl extends UnicastRemoteObject implements ILookup {
 			prepStmt.setDouble(1, score);
 			ResultSet res = prepStmt.executeQuery();
 
-			String sid = String.valueOf(generateID());
+			String sid = String.valueOf(id++);
 			put(sid, conn, prepStmt, res);
 			return sid;
 
@@ -173,10 +173,6 @@ public class LookupImpl extends UnicastRemoteObject implements ILookup {
 		} catch (SQLException e) {
 			throw new RemoteException(e.getMessage());
 		}
-	}
-
-	public synchronized long generateID() throws RemoteException {
-		return id++;
 	}
 
 }

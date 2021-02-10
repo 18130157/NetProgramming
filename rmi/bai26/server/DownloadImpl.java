@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	private static final long serialVersionUID = 1L;
-	private static volatile long id = 0;
+	private static long id = 0;
 	private static Map<Long, InputStream> map = new HashMap<>();
 
 	protected DownloadImpl() throws RemoteException {
@@ -26,7 +26,7 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 		try {
 			File sFile = new File(Server.getServer_dir() + "\\" + filename);
 			InputStream bis = new BufferedInputStream(new FileInputStream(sFile));
-			long sid = generateID();
+			long sid = id++;
 			map.put(sid, bis);
 			return sid;
 
@@ -62,13 +62,10 @@ public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	public void close(long sessionID) throws RemoteException {
 		try {
 			map.remove(sessionID).close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new RemoteException(e.getMessage());
 		}
-	}
-
-	public synchronized long generateID() throws RemoteException {
-		return id++;
 	}
 
 }
