@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class UploadImpl extends UnicastRemoteObject implements IUpload {
 	private static final long serialVersionUID = 1L;
-	private static long id = 0;
+	private static volatile long id = 0;
 	private static Map<Long, OutputStream> mapOutStream = new HashMap<>();
 
 	protected UploadImpl() throws RemoteException {
@@ -23,7 +23,7 @@ public class UploadImpl extends UnicastRemoteObject implements IUpload {
 	public long sendFilename(String filename) throws RemoteException {
 		try {
 			OutputStream bos = new BufferedOutputStream(new FileOutputStream(Server.getServer_dir() + "\\" + filename));
-			long sid = id++;
+			long sid = generateID();
 			mapOutStream.put(sid, bos);
 			return sid;
 
@@ -53,6 +53,10 @@ public class UploadImpl extends UnicastRemoteObject implements IUpload {
 		} catch (IOException e) {
 			throw new RemoteException(e.getMessage());
 		}
+	}
+	
+	public synchronized long generateID() throws RemoteException {
+		return id++;
 	}
 
 }
