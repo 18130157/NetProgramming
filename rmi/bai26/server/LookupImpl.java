@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import bai25.Server;
 import base.Student;
 
 public class LookupImpl extends UnicastRemoteObject implements ILookup {
