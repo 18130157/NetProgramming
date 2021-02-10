@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class UploadImpl extends UnicastRemoteObject implements IUpload {
 	private static final long serialVersionUID = 1L;
-	private static long id = 0;
+	private static volatile long id = 0;
 	private static Map<Long, OutputStream> mapOutStream = new HashMap<>();
 
 	protected UploadImpl() throws RemoteException {

@@ -15,7 +15,7 @@ import base.Student;
 
 public class LookupImpl extends UnicastRemoteObject implements ILookup {
 	private static final long serialVersionUID = 1L;
-	private static long id = 0;
+	private static volatile long id = 0;
 	private static Map<String, Connection> mapConn = new HashMap<>();
 	private static Map<String, PreparedStatement> mapPrepStmt = new HashMap<>();
 	private static Map<String, ResultSet> mapRes = new HashMap<>();

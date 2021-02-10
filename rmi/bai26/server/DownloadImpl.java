@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class DownloadImpl extends UnicastRemoteObject implements IDownload {
 	private static final long serialVersionUID = 1L;
-	private static long id = 0;
+	private static volatile long id = 0;
 	private static Map<Long, InputStream> map = new HashMap<>();
 
 	protected DownloadImpl() throws RemoteException {
