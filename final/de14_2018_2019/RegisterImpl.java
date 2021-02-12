@@ -42,13 +42,13 @@ public class RegisterImpl extends UnicastRemoteObject implements IRegister {
 
 		if (action.equalsIgnoreCase(Server.VIEW_INFO)) {
 			if (count != 2)
-				return "Invalid command !";
+				return "Invalid VIEW_INFO command !";
 			return lookup(tokenizer.nextToken().trim());
 		} else
 
 		if (action.equalsIgnoreCase(Server.REGISTER)) {
 			if (count != 4)
-				return "Invalid command !";
+				return "Invalid REGISTER command !";
 
 			final Candidate c = new Candidate();
 			if (!c.load(tokenizer))
