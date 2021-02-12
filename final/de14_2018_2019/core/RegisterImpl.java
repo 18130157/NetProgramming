@@ -55,10 +55,21 @@ public class RegisterImpl extends UnicastRemoteObject implements IRegister {
 				return "Invalid date of birth !";
 
 			int sessionID = sid++;
-			String id = String.format("MS%03d", sessionID);;
+			String id = String.format("MS%03d", sessionID);
+
 			c.setId(id);
 			mapID.put(sessionID, id);
-			save(c);
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						save(c);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
 
 			return id;
 
@@ -124,14 +135,13 @@ public class RegisterImpl extends UnicastRemoteObject implements IRegister {
 				mapID.remove(sessionID);
 			return "Bye";
 		}
-		
+
 		StringTokenizer tokenizer = new StringTokenizer(command, Server.delim);
 		if (tokenizer.countTokens() != 2 || !tokenizer.nextToken().trim().equalsIgnoreCase(Server.SEND_FOTO))
 			return "Invalid SEND_FOTO command !";
 
 		String id, fotoName;
-		if ((id = mapID.get(sessionID)) != null &&
-				(fotoName = getFotoName(id, tokenizer.nextToken().trim())) != null) {
+		if ((id = mapID.get(sessionID)) != null && (fotoName = getFotoName(id, tokenizer.nextToken().trim())) != null) {
 			try {
 				OutputStream bos = new BufferedOutputStream(new FileOutputStream("Data/" + fotoName));
 				mapOutStream.put(sessionID, bos);

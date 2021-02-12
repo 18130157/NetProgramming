@@ -16,8 +16,7 @@ public class Server {
 
 	// SEND_FOTO|file_name
 	// ??? SEND_FOTO|file_path chứ nhỉ ?
-	// Nếu chỉ có file_name thì ảnh mà Client muốn upload phải nằm cùng cấp với
-	// folder src ?
+	// Nếu chỉ có file_name thì ảnh mà Client muốn upload phải nằm cùng cấp với folder src ?
 	public static final String SEND_FOTO = "SEND_FOTO";
 
 	// VIEW_INFO|Mã_Số_Đã_Đăng_Ký
