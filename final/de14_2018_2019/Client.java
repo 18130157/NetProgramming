@@ -1,4 +1,4 @@
-package de14_2018_2019.core;
+package de14_2018_2019;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
