@@ -1,5 +1,5 @@
 Thư mục Data nằm cùng cấp folder src.
-File format info.data
+File format info.dat
 ----------------------------------------
 	Số thí sinh
 
