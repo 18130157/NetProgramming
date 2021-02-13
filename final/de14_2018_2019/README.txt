@@ -21,7 +21,7 @@ File format info.dat
 	Address thí sinh n
 ----------------------------------------
 
-Chương trình hoạt động theo 2 Phase
+Ứng dụng hoạt động theo 2 Phase
 
 Phase 1: Chỉ chấp nhận các command REGISTER, VIEW_INFO, QUIT
 Nếu REGISTER thành công thì vào Phase 2.
