@@ -52,10 +52,10 @@ Nếu bên Server dùng cấu trúc dữ liệu dạng giống BidiMap sẽ okay
 
 
 Nhiều thread write xuống 1 file
-	(3) Method save() sẽ được synchronized. Khi cần lưu thí sinh thì tạo ra 1 thread gọi save().
-		-> Mở file nhiều lần -> chi phí cao ?
-	(4) Dùng BlockingQueue
-		-> Mở file 1 lần ?
+	(3) Dùng synchronized cho method save()
+	(4) Dùng BlockingQueue ?
+
+
 
 
 Hay là do ban đầu, việc xác định các method cho Remote Interface đã không tốt ?
