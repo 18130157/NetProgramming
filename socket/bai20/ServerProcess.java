@@ -11,10 +11,11 @@ import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
 public class ServerProcess implements Runnable {
-//	private ServerSocket server;
 	private Socket socket;
 	private BufferedReader netIn;
 	private PrintWriter netOut;
+
+	private StringTokenizer tokenizer;
 
 	private static DecimalFormat df;
 
@@ -61,9 +62,10 @@ public class ServerProcess implements Runnable {
 					continue;
 				}
 
-				StringTokenizer tokenizer = new StringTokenizer(command, operator);
-
 				try {
+					// "3 + 2d" OR "3 + 2f" vẫn ra kết quả ?
+					// "2d" -> số 2 kiểu double -> parse thành công ?
+					// "2f" -> số 2 kiểu float -> parse thành công ?
 					n1 = Double.parseDouble(tokenizer.nextToken());
 					n2 = Double.parseDouble(tokenizer.nextToken());
 				} catch (NumberFormatException e) {
@@ -83,14 +85,9 @@ public class ServerProcess implements Runnable {
 	}
 
 	public String findOperator(String command) {
-		if (new StringTokenizer(command, "+").countTokens() == 2)
-			return "+";
-		if (new StringTokenizer(command, "-").countTokens() == 2)
-			return "-";
-		if (new StringTokenizer(command, "*").countTokens() == 2)
-			return "*";
-		if (new StringTokenizer(command, "/").countTokens() == 2)
-			return "/";
+		for (String op : Server.operators)
+			if ((tokenizer = new StringTokenizer(command, op)).countTokens() == 2)
+				return op;
 		return null;
 	}
 
