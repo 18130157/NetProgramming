@@ -13,20 +13,13 @@ public class Server {
 	public static final String FB_SCORE = "findByScore";
 	public static String dbUrl = "jdbc:odbc:students";
 
-	static {
-		try {
-			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static String getServer_dir() { return server_dir; }
 
 	public static void setServer_dir(String server_dir) { Server.server_dir = server_dir; }
 
 	public static void main(String[] args) {
 		try {
+			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 			Registry reg = LocateRegistry.createRegistry(12345);
 			IDownload d = new DownloadImpl();
 			IUpload u = new UploadImpl();
@@ -37,7 +30,7 @@ public class Server {
 			reg.rebind("lookup", lo);
 			System.out.println("Server is running !");
 
-		} catch (RemoteException e) {
+		} catch (RemoteException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
