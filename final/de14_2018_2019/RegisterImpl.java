@@ -21,6 +21,15 @@ public class RegisterImpl extends UnicastRemoteObject implements IRegister {
 	private static int sid = 1;
 	private static Map<Integer, String> mapID = new HashMap<>();
 	private static Map<Integer, OutputStream> mapOutStream = new HashMap<>();
+	
+	private static RandomAccessFile raf;
+	static {
+		try {
+			raf = new RandomAccessFile(Server.infoFile, "rw");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
 	protected RegisterImpl() throws RemoteException {
 		super();
@@ -79,14 +88,13 @@ public class RegisterImpl extends UnicastRemoteObject implements IRegister {
 
 	public synchronized void save(Candidate c) throws RemoteException {
 		try {
-			RandomAccessFile raf = new RandomAccessFile(Server.infoFile, "rw");
 			long size = raf.length();
+			raf.seek(0);
 			int count = raf.readInt();
 			raf.seek(0);
 			raf.writeInt(++count);
 			raf.seek(size);
 			c.save(raf);
-			raf.close();
 
 		} catch (IOException e) {
 			throw new RemoteException(e.getMessage());
