@@ -52,7 +52,7 @@ public class Bai10 {
 			return false;
 		long size = sFile.length() / nSubFile;
 		long odd = sFile.length() - size * nSubFile;
-		return (odd == 0) ? splitFile(source, size) : splitFile(source, size + odd);
+		return splitFile(source, size + odd);
 	}
 
 	public static String createSubFilePath(File sFile, boolean odd, long serial) {
